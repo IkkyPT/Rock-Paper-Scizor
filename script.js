@@ -1,61 +1,91 @@
+document.addEventListener('DOMContentLoaded', () => {
 let playerScore = 0;
-let computerScore = 0; 
+let computerScore = 0;
+let playerSelection = "";
+let result = "";
+let plays = 0;
 
-console.log(game());
 
 function game(){
-    for (let i = 0; i < 5; i++){
-        playRound(playerSelection(), computerSelection())
-    }
 
     if(playerScore > computerScore) {
-        console.log("Player Won The Match!")
+        result = "Player Won The Match!";
     }
-    else if(computerScore > playerScore) {
-        console.log("Computer Won The Match!")
+    else if (computerScore > playerScore) {
+        result = "Computer Won The Match!";
     }
-    else{
-        console.log("It's a Draw!")
+    else {
+        result = "It's a Draw!";
     }
+
+    // Gives the final winner
+    const gameHistory = document.querySelector('.game-history');
+    gameHistory.textContent = result;
 }
 
 // Game rules 
 function playRound(playerSelection, computerSelection) { 
 
     if (playerSelection === "rock" && computerSelection === "paper"){
-        console.log("You Lose! Paper beats Rock")
+        result = "You Lose! Paper beats Rock";
         computerScore = computerScore + 1
     }
     else if(playerSelection === "rock" && computerSelection === "scizor"){
-        console.log("You Win! Rock beats Scizor")
+        result = "You Win! Rock beats Scizor";
         playerScore = playerScore + 1
     }
 
     if (playerSelection === "paper" && computerSelection === "scizor")
     {
-        console.log("You Lose! Scizor beats Paper")
+        result = "You Lose! Scizor beats Paper";
         computerScore = computerScore + 1
     }
     else if(playerSelection === "paper" && computerSelection === "rock"){
-        console.log("You Win! Paper beats Rock")
+        result = "You Win! Paper beats Rock";
         playerScore = playerScore + 1
     } 
     
     if (playerSelection === "scizor" && computerSelection === "rock")
     {
-        console.log("You Lose! Rock beats Scizor")
+        result = "You Lose! Rock beats Scizor";
         computerScore = computerScore + 1
     }
     else if(playerSelection === "scizor" && computerSelection === "paper"){
-        console.log("You Win! Scizor beats Paper")
+        result = "You Win! Scizor beats Paper";
         playerScore = playerScore + 1
     }
     
     if (playerSelection === computerSelection)
     {
-        console.log("It's a Draw!")
+        result = "It's a Draw!";
         playerScore = playerScore + 0
         computerScore = computerScore + 0
+    }
+
+    // Update the player score
+    const playerResult = document.getElementById('player-score')
+    playerResult.textContent = playerScore;
+
+    // Update the computer score
+    const computerResult = document.getElementById('computer-score')
+    computerResult.textContent = computerScore;
+
+    // Update the current game winner every play
+    const gameHistory = document.querySelector('.game-history');
+    gameHistory.textContent = result;
+
+    // Update the number of plays
+    plays = plays + 1;
+
+    const numPlays = document.querySelector('.number-plays');
+    numPlays.textContent = plays;
+
+    // If the number plays == 5 call game() function to verify the winner and reset the variables to 0
+    if (plays == 5) {
+        game();
+        playerScore = 0;
+        computerScore = 0;
+        plays = 0;
     }
 }
 
@@ -74,17 +104,24 @@ function computerSelection(){
     }
 }
 
-// Generate player play
-function playerSelection(){
+// UI
 
-    let playerPlay = prompt("Do you choose Rock, Paper or Scizor?")
-    playerPlay = playerPlay.toLocaleLowerCase()
-    const playerOption = ["rock", "paper", "scizor"]
+const rockBtn = document.querySelector('#btn-rock')
+const paperBtn = document.querySelector('#btn-paper')
+const scizorBtn = document.querySelector('#btn-scizor')
+const gameBtn = document.querySelector('#buttons')
 
-        if (playerOption.includes(playerPlay)){
-            return playerPlay
-        }
-        else {
-            return playerSelection()
-        }
-}
+
+rockBtn.addEventListener('click', () => {
+    playRound("rock", computerSelection());
+});
+
+paperBtn.addEventListener('click', () => {
+    playRound("paper", computerSelection());
+});
+
+scizorBtn.addEventListener('click', () => {
+    playRound("scizor", computerSelection());
+});
+
+});
